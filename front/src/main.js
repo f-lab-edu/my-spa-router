@@ -1,17 +1,25 @@
-import createRouter from './createRouter.js';
-import NavLink from './components/NavLink.js';
-import Home from './views/Home.js';
-import Posts from './views/Posts.js';
-import Settings from './views/Settings.js';
+import Router from './components/Router.js';
+import NavLink from "./components/NavLink.js";
 
-const router = createRouter({
-    initialRoutes: [
-        { path: '/', view: Home },
-        { path: '/posts', view: Posts },
-        { path: '/settings', view: Settings },
-    ],
-});
+const routes = [
+    {
+        id: "home",
+        path: '/',
+        component: () => import('./views/Home.js')
+    },
+    {
+        id: "posts",
+        path: '/posts',
+        component: () => import('./views/Posts.js')
+    },
+    {
+        id: "settings",
+        path: '/settings',
+        component: () => import('./views/Settings.js')
+    }
+];
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('#main-nav a[href]').forEach(el => new NavLink(el, router));
-});
+export const router = new Router({ outlet: '#app', routes });
+for (const route of routes) {
+    new NavLink(document.getElementById(route.id), router);
+}
